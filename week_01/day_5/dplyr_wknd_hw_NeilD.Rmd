@@ -1,0 +1,143 @@
+---
+title: "`dplyr` Weekend Homework"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+    css: ../../../styles.css
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+```
+<br>
+
+
+
+As this is your first weekend homework, here are some tips: 
+
+* Try to schedule some time in your weekend to work on the homework so it's not suddenly Monday morning and you haven't gotten started yet (it happens).
+* Remember that the weekend homework is for your learning, so try to use it as an opportunity to apply and consolidate everything you've learned in the week.
+* Also use it as an opportunity to spend a bit more time making your code readable and reproducible, by practising commenting and writing some text around your steps and findings. You will thank yourself later! 
+  * This will be especially useful for this specific weekend homework as it's very open-ended and you will eventually forget your own thought process
+* A bit obvious, but don't spend your entire weekend working on the homework! Remember to spend time doing things you enjoy and rest up ahead of the following week.
+
+The data for this weekend homework is scraped from Goodreads (a website all about books) and made publicly available on Kaggle. You can read more about the data [here](https://www.kaggle.com/jealousleopard/goodreadsbooks).
+
+# MVP
+
+### First steps
+
+Load necessary packages and read in `books.csv`. Investigate dimensions, variables, missing values - you know the drill!
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+books <- read_csv ("data/books.csv")
+```
+
+
+```{r}
+dim(books)
+```
+# No. of rows, No. of Columns
+# note kaggle states 10 columns but data says 12 (must be some redundant columns which perhaps can be removed)
+# Kaggle states over 10,000 books but no. of rows are 8472 (must be some porrly identified rows, perhaps these can be cleaned up)
+
+
+```{r}
+var(books)
+```
+
+# variable names
+```{r}
+names(books)
+```
+
+# check the first 10 entries
+```{r}
+head(books, 10)
+```
+
+# check the last 10 entries
+```{r}
+tail(books, 10)
+```
+
+# get an overview of all data
+```{r}
+glimpse(books)
+```
+
+# view dataset in table format
+```{r}
+view(books)
+```
+
+# get rid of some unhelpful columns and collate potential recommendations
+# tibble created in 'books_recommends'
+```{r}
+books__recommends <- select(books, title, authors, average_rating, ratings_count, text_reviews_count, publication_date)
+```
+
+#filter for authors only
+```{r}
+authors_only <- select(books__recommends, authors)
+```
+
+#list all authors in table format
+```{r}
+view(authors_only)
+
+```
+
+# arrange books by average rating (high to low)
+```{r}
+arrange(books, desc(average_rating))
+```
+
+# list all books that are 5* rated
+```{r}
+five_star_books <- filter(books, average_rating == 5.00)
+
+five_star_books
+```
+
+
+# list all 5* books published after year 2000
+doesnt work, think its to do with the data format?
+```{r}
+mutate(five_star_books, five_star_2000 = publication_date > 2000)
+```
+
+# how many books are 5 star rated?
+```{r}
+summarise(five_star_books, average_rating = n())
+```
+
+# Pipes allow us to create multiple lines of operation without having to create lots of datasets in between
+
+
+# Calculate the average book review rating overall?
+```{r}
+average_book_rating <- books %>% 
+  summarise(average_value = mean(average_rating, na.rm = TRUE)) %>% 
+  pull()
+
+average_book_rating
+```
+
+
+
+
+### Up to you
+
+Now it's up to you... For this weekend homework there will be no specific tasks, just you and this dataset! Using everything you've learned this week, try to describe/summarise at least 5 things about this dataset - using R and the tidyverse of course! Feel free to find and use new functions if there is something that the tidyverse doesn't offer, but do try to use this homework to apply what you have learned this week. Be prepared to share one of your findings on Monday!
+
+### Remember
+
+Before you submit, go through your weekend homework and make sure your code is following best practices as laid out in the `coding_best_practice` lesson.

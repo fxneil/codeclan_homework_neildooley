@@ -1,0 +1,13 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+library(tidyverse)
+
+Read in Starbucks Data
+
+```{r}
+read_csv("starbucks_drinkMenu_expanded.csv")
+```
+
